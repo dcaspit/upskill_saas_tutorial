@@ -1,13 +1,17 @@
 class ContactsController < ApplicationController
    def new
-      # Running on creating contact page.
+      # Looking for core responding views file that matches the method name.
       @contact = Contact.new
    end
    
    def create
-      # Running when sumbiting the form.
+      # Looking for core responding views file that matches the method name.
       @contact = Contact.new(contact_params)
       if @contact.save # Checking if the form Inserted succesfully into the db.
+         name = params[:contact][:name]
+         email = params[:contact][:email]
+         body = params[:contact][:comments]
+         ContactMailer.contact_email(name, email, body).deliver
          flash[:success] = "Message sent."
          redirect_to new_contact_path
       else
